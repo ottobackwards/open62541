@@ -71,7 +71,9 @@ echo "=== Install build, then compile examples ===" && echo -en 'travis_fold:sta
         -DUA_NAMESPACE_ZERO=FULL \
         -DUA_ENABLE_AMALGAMATION=OFF \
         -DCMAKE_INSTALL_PREFIX=$TRAVIS_BUILD_DIR/open62541_install ..
-    make -j install
+    # travis_wait is a workaround for timeout if there is no output within 10 minutes
+    # Building FullNS0 with Release takes sometimes more than 10 mins
+    travis_wait -i 60 -l 2400 "make -j install"
     if [ $? -ne 0 ] ; then exit 1 ; fi
 
     cd .. && rm build -rf
@@ -436,7 +438,9 @@ echo -en 'travis_fold:end:script.build.unit_test_ns0_full\\r'
 
 if ! [ -z ${DEBIAN+x} ]; then
     echo -e "\r\n== Building the Debian package =="  && echo -en 'travis_fold:start:script.build.debian\\r'
-    dpkg-buildpackage -b
+    # travis_wait is a workaround for timeout if there is no output within 10 minutes
+    # Building FullNS0 with Release takes sometimes more than 10 mins
+    travis_wait -i 60 -l 2400 "dpkg-buildpackage -b"
     if [ $? -ne 0 ] ; then exit 1 ; fi
     cp ../open62541*.deb .
     # Copy for github release script

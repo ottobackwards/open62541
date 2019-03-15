@@ -59,6 +59,9 @@ if [ -z ${DOCKER+x} ] && [ -z ${SONAR+x} ]; then
 	make -j
 	make install
 
+    curl https://raw.githubusercontent.com/m3t/travis_wait/master/travis_wait -s -o $LOCAL_PKG/bin/travis_wait
+    chmod +x $LOCAL_PKG/bin/travis_wait
+
 	echo -en 'travis_fold:end:script.before_install.external\\r'
 
 	echo "=== Installing python packages ===" && echo -en 'travis_fold:start:before_install.python\\r'
